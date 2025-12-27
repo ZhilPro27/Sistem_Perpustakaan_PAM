@@ -5,7 +5,8 @@ import {
     getPeminjamanById,
     updatePeminjaman,
     deletePeminjaman,
-    searchPeminjaman
+    searchPeminjaman,
+    getPeminjamanWithDetails
 } from '../controllers/peminjamanController.js';
 import { verifyToken } from '../middleware/auth.js';
 
@@ -17,5 +18,6 @@ router.get('/peminjaman/:id', verifyToken, getPeminjamanById);
 router.put('/peminjaman/update/:id', verifyToken, updatePeminjaman);
 router.delete('/peminjaman/delete/:id', verifyToken, deletePeminjaman);
 router.get('/peminjaman/search', verifyToken, searchPeminjaman);
+router.get('/peminjaman/details/:id', verifyToken, getPeminjamanWithDetails);
 
 export default router;

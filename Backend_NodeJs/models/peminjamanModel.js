@@ -75,5 +75,21 @@ export const peminjamanModel = {
             logger.error(`Error searching peminjaman with keyword ${keyword}: ${error.message}`);
             throw error;
         }
+    },
+
+    getPeminjamanWithDetails: async (id) => {
+        const sql = `SELECT peminjaman.*, buku.judul AS buku_judul, anggota.nama_anggota AS anggota_nama
+                     FROM peminjaman
+                        JOIN buku ON peminjaman.id_buku = buku.id_buku
+                        JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota
+                     WHERE peminjaman.id_peminjaman = ?`;
+        try {
+            const [rows] = await db.query(sql, [id]);
+            logger.info(`Retrieved peminjaman with details for ID: ${id}`);
+            return rows[0] || null;
+        } catch (error) {
+            logger.error(`Error retrieving peminjaman with details for ID ${id}: ${error.message}`);
+            throw error;
+        }
     }
 };

@@ -91,3 +91,19 @@ export const searchPeminjaman = async (req, res) => {
         res.status(500).json({ msg: "Server error" });
     }
 };
+
+export const getPeminjamanWithDetails = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const peminjaman = await peminjamanModel.getPeminjamanWithDetails(id);
+        if (!peminjaman) {
+            logger.warn(`Peminjaman with details not found for ID: ${id}`);
+            return res.status(404).json({ msg: "Peminjaman not found" });
+        }
+        logger.info(`Fetched peminjaman with details for ID: ${id}`);
+        res.json(peminjaman);
+    } catch (error) {
+        logger.error(`Error fetching peminjaman with details: ${error.message}`);
+        res.status(500).json({ msg: "Server error" });
+    }
+};
