@@ -1,0 +1,5 @@
+/frontend-perpustakaan
+/Backend_NodeJs/node_modules
+/Backend_NodeJs/.env
+/Backend_NodeJs/logs/*
+/Backend_NodeJs/uploads/*
