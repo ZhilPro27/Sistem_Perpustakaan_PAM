@@ -25,7 +25,7 @@ export const loginPustakawan = async (req, res) => {
                 return res.status(400).json({ msg: "Invalid credentials" });
             }
             const token = jwt.sign({ id: user.id_pustakawan }, process.env.JWT_SECRET, {
-                expiresIn: 3600,
+                expiresIn: `24h`,
             });
             logger.info(`Pustakawan logged in: ${email} - ${req.ip}`);
             res.json({ 
