@@ -1,66 +1,33 @@
-import db from '../config/database.js';
 import baseLogger from "../src/utils/logger.js";
 const logger = baseLogger.child({ context: 'DendaModel' });
 
 export const dendaModel = {
-    getAllDenda: async () => {
+    getAllDenda: async (conn) => {
         const sql = "SELECT denda.*, anggota.nama FROM denda JOIN peminjaman ON denda.id_peminjaman = peminjaman.id_peminjaman JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota";
-        try {
-            const [rows] = await db.query(sql);
-            logger.info("Retrieved all denda from database");
-            return rows;
-        } catch (error) {
-            logger.error(`Error retrieving all denda: ${error.message}`);
-            throw error;
-        }
+        const [results] = await conn.query(sql);
+        logger.info(`Retrieved ${results.length} denda records`);
+        return results;
     },
 
-    getDendaById: async (id) => {
+    getDendaById: async (conn, id) => {
         const sql = "SELECT * FROM denda WHERE id_denda = ?";
-        try {
-            const [rows] = await db.query(sql, [id]);
-            logger.info(`Retrieved denda with ID: ${id}`);
-            return rows[0] || null;
-        } catch (error) {
-            logger.error(`Error retrieving denda with ID ${id}: ${error.message}`);
-            throw error;
-        }
+        const [results] = await conn.query(sql, [id]);
+        logger.info(`Retrieved denda with ID: ${id}`);
+        return results[0] || null;
     },
 
-    updateDenda: async (id, dendaData) => {
+    updateDenda: async (conn, id, dendaData) => {
         const sql = "UPDATE denda SET ? WHERE id_denda = ?";
-        try {
-            const [result] = await db.query(sql, [dendaData, id]);
-            logger.info(`Updated denda with ID: ${id}`);
-            return result;
-        } catch (error) {
-            logger.error(`Error updating denda with ID ${id}: ${error.message}`);
-            throw error;
-        }
+        const [result] = await conn.query(sql, [dendaData, id]);
+        logger.info(`Updated denda with ID: ${id}`);
+        return result;
     },
 
-    searchDenda: async (keyword) => {
+    searchDenda: async (conn, keyword) => {
         const sql = "SELECT * FROM denda JOIN peminjaman ON denda.id_peminjaman = peminjaman.id_peminjaman JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota WHERE anggota.nama_anggota LIKE ?";
         const searchKeyword = `%${keyword}%`;
-        try {
-            const [rows] = await db.query(sql, [searchKeyword]);
-            logger.info(`Searched denda with keyword: ${keyword}`);
-            return rows;
-        } catch (error) {
-            logger.error(`Error searching denda with keyword ${keyword}: ${error.message}`);
-            throw error;
-        }
-    },
-
-    getDendaWithNama: async () => {
-        const sql = "SELECT denda.*, anggota.nama FROM denda JOIN peminjaman ON denda.id_peminjaman = peminjaman.id_peminjaman JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota";
-        try {
-            const [rows] = await db.query(sql);
-            logger.info(`Retrieved denda with nama`);
-            return rows[0] || null;
-        } catch (error) {
-            logger.error(`Error retrieving denda with nama: ${error.message}`);
-            throw error;
-        }
+        const [results] = await conn.query(sql, [searchKeyword]);
+        logger.info(`Searched denda with keyword: ${keyword}`);
+        return results;
     }
 };

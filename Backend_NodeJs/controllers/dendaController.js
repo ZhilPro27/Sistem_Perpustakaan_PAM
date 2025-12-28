@@ -59,18 +59,3 @@ export const searchDenda = async (req, res) => {
         res.status(500).json({ msg: "Server error" });
     }
 };
-
-export const getDendaWithNama = async (req, res) => {
-    try {
-        const denda = await dendaModel.getDendaWithNama();
-        if (!denda) {
-            logger.warn(`Denda with nama not found`);
-            return res.status(404).json({ msg: "Denda not found" });
-        }
-        logger.info(`Fetched denda with nama`);
-        res.json(denda);
-    } catch (error) {
-        logger.error(`Error fetching denda with nama: ${error.message}`);
-        res.status(500).json({ msg: "Server error" });
-    }
-};

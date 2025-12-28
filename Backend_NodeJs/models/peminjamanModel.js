@@ -3,93 +3,47 @@ import baseLogger from "../src/utils/logger.js";
 const logger = baseLogger.child({ context: 'PeminjamanModel' });
 
 export const peminjamanModel = {
-    getAllPeminjaman: async () => {
+    getAllPeminjaman: async (conn) => {
         const sql = "SELECT * FROM peminjaman JOIN buku ON peminjaman.id_buku = buku.id_buku JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota";
-        try {
-            const [rows] = await db.query(sql);
-            logger.info("Retrieved all peminjaman from database");
-            return rows;
-        } catch (error) {
-            logger.error(`Error retrieving all peminjaman: ${error.message}`);
-            throw error;
-        }
+        const [results] = await conn.query(sql);
+        logger.info(`Retrieved ${results.length} peminjaman records`);
+        return results;
     },
 
-    getPeminjamanById: async (id) => {
+    getPeminjamanById: async (conn, id) => {
         const sql = "SELECT * FROM peminjaman WHERE id_peminjaman = ?";
-        try {
-            const [rows] = await db.query(sql, [id]);
-            logger.info(`Retrieved peminjaman with ID: ${id}`);
-            return rows[0] || null;
-        } catch (error) {
-            logger.error(`Error retrieving peminjaman with ID ${id}: ${error.message}`);
-            throw error;
-        }
+        const [results] = await conn.query(sql, [id]);
+        logger.info(`Retrieved peminjaman with ID: ${id}`);
+        return results[0] || null;
     },
 
-    insertPeminjaman: async (peminjamanData) => {
+    insertPeminjaman: async (conn, peminjamanData) => {
         const sql = "INSERT INTO peminjaman SET ?";
-        try {
-            const [result] = await db.query(sql, peminjamanData);
-            logger.info(`Inserted new peminjaman with ID: ${result.insertId}`);
-            return result;
-        } catch (error) {
-            logger.error(`Error inserting new peminjaman: ${error.message}`);
-            throw error;
-        }
+        const [result] = await conn.query(sql, [peminjamanData]);
+        logger.info(`Inserted new peminjaman with ID: ${result.insertId}`);
+        return result;
     },
 
-    updatePeminjaman: async (id, peminjamanData) => {
+    updatePeminjaman: async (conn, id, peminjamanData) => {
         const sql = "UPDATE peminjaman SET ? WHERE id_peminjaman = ?";
-        try {
-            const [result] = await db.query(sql, [peminjamanData, id]);
-            logger.info(`Updated peminjaman with ID: ${id}`);
-            return result;
-        } catch (error) {
-            logger.error(`Error updating peminjaman with ID ${id}: ${error.message}`);
-            throw error;
-        }
+        const [result] = await conn.query(sql, [peminjamanData, id]);
+        logger.info(`Updated peminjaman with ID: ${id}`);
+        return result;
     },
 
-    deletePeminjaman: async (id) => {
+    deletePeminjaman: async (conn, id) => {
         const sql = "DELETE FROM peminjaman WHERE id_peminjaman = ?";
-        try {
-            const [result] = await db.query(sql, [id]);
-            logger.info(`Deleted peminjaman with ID: ${id}`);
-            return result;
-        } catch (error) {
-            logger.error(`Error deleting peminjaman with ID ${id}: ${error.message}`);
-            throw error;
-        }
+        const [result] = await conn.query(sql, [id]);
+        logger.info(`Deleted peminjaman with ID: ${id}`);
+        return result;
     },
 
-    searchPeminjaman: async (keyword) => {
+    searchPeminjaman: async (conn, keyword) => {
         const sql = `SELECT * FROM peminjaman JOIN buku ON peminjaman.id_buku = buku.id_buku JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota
                      WHERE buku.judul LIKE ? OR anggota.nama_anggota LIKE ?`;
         const searchKeyword = `%${keyword}%`;
-        try {
-            const [rows] = await db.query(sql, [searchKeyword, searchKeyword]);
-            logger.info(`Searched peminjaman with keyword: ${keyword}`);
-            return rows;
-        } catch (error) {
-            logger.error(`Error searching peminjaman with keyword ${keyword}: ${error.message}`);
-            throw error;
-        }
-    },
-
-    getPeminjamanWithDetails: async (id) => {
-        const sql = `SELECT peminjaman.*, buku.judul AS buku_judul, anggota.nama_anggota AS anggota_nama
-                     FROM peminjaman
-                        JOIN buku ON peminjaman.id_buku = buku.id_buku
-                        JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota
-                     WHERE peminjaman.id_peminjaman = ?`;
-        try {
-            const [rows] = await db.query(sql, [id]);
-            logger.info(`Retrieved peminjaman with details for ID: ${id}`);
-            return rows[0] || null;
-        } catch (error) {
-            logger.error(`Error retrieving peminjaman with details for ID ${id}: ${error.message}`);
-            throw error;
-        }
+        const [results] = await conn.query(sql, [searchKeyword, searchKeyword]);
+        logger.info(`Found ${results.length} peminjaman records matching keyword: ${keyword}`);
+        return results;
     }
 };
