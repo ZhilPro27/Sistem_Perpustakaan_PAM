@@ -1,6 +1,7 @@
 import { bukuModel } from "../models/bukuModel.js";
 import db from "../src/config/db.js";
 import baseLogger from "../src/utils/logger.js";
+import fs from "fs";
 const logger = baseLogger.child({ context: 'BukuController' });
 
 export const getAllBuku = async (req, res) => {
@@ -78,6 +79,14 @@ export const updateBuku = async (req, res) => {
             logger.warn(`Attempt to update non-existing buku with ID: ${id}`);
             return res.status(404).json({ msg: "Buku not found" });
         }
+        if (existingBuku.gambar && req.file) {
+            const oldImagePath = `./uploads/${existingBuku.gambar}`;
+            fs.unlink(oldImagePath, (err) => {
+                if (err) {
+                    logger.error(`Error deleting old gambar: ${err.message}`);
+                }
+            });
+        }
         if (req.file) {
         bukuData.gambar = req.file.filename;
         logger.info(`Uploading gambar for buku update: ${req.file.filename}`);
@@ -106,6 +115,14 @@ export const deleteBuku = async (req, res) => {
         if (!existingBuku) {
             logger.warn(`Attempt to delete non-existing buku with ID: ${id}`);
             return res.status(404).json({ msg: "Buku not found" });
+        }
+        if (existingBuku.gambar) {
+            const imagePath = `./uploads/${existingBuku.gambar}`;
+            fs.unlink(imagePath, (err) => {
+                if (err) {
+                    logger.error(`Error deleting gambar: ${err.message}`);
+                }
+            });
         }
         const result = await bukuModel.deleteBuku(conn, id);
         await conn.commit();
