@@ -6,8 +6,8 @@ import {
     updateAnggota,
     deleteAnggota,
     searchAnggota
-} from '../src/controllers/anggotaController.js';
-import { verifyToken } from '../src/middleware/auth.js';
+} from '../controllers/anggotaController.js';
+import { verifyToken } from '../middleware/auth.js';
 
 const router = express.Router();
 

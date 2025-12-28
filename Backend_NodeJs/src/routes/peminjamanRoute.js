@@ -5,10 +5,9 @@ import {
     getPeminjamanById,
     updatePeminjaman,
     deletePeminjaman,
-    searchPeminjaman,
-    getPeminjamanWithDetails
-} from '../src/controllers/peminjamanController.js';
-import { verifyToken } from '../src/middleware/auth.js';
+    searchPeminjaman
+} from '../controllers/peminjamanController.js';
+import { verifyToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -18,6 +17,5 @@ router.get('/peminjaman/:id', verifyToken, getPeminjamanById);
 router.put('/peminjaman/update/:id', verifyToken, updatePeminjaman);
 router.delete('/peminjaman/delete/:id', verifyToken, deletePeminjaman);
 router.get('/peminjaman/search', verifyToken, searchPeminjaman);
-router.get('/peminjaman/details/:id', verifyToken, getPeminjamanWithDetails);
 
 export default router;

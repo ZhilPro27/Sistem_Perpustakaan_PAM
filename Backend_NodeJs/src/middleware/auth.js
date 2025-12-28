@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import baseLogger from '../src/utils/logger.js';
+import baseLogger from '../utils/logger.js';
 const logger = baseLogger.child({ context: 'AuthMiddleware' });
 import dotenv from 'dotenv';
 

@@ -1,5 +1,5 @@
 import { peminjamanModel } from "../models/peminjamanModel.js";
-import db from "../src/config/db.js";
+import db from "../config/database.js";
 import baseLogger from "../utils/logger.js";
 const logger = baseLogger.child({ context: 'PeminjamanController' });
 

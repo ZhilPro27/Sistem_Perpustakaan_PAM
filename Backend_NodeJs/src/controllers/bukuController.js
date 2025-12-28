@@ -1,5 +1,5 @@
 import { bukuModel } from "../models/bukuModel.js";
-import db from "../src/config/db.js";
+import db from "../config/database.js";
 import baseLogger from "../utils/logger.js";
 import fs from "fs";
 const logger = baseLogger.child({ context: 'BukuController' });
