@@ -50,5 +50,17 @@ export const dendaModel = {
             logger.error(`Error searching denda with keyword ${keyword}: ${error.message}`);
             throw error;
         }
+    },
+
+    getDendaWithNama: async () => {
+        const sql = "SELECT denda.*, anggota.nama FROM denda JOIN peminjaman ON denda.id_peminjaman = peminjaman.id_peminjaman JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota";
+        try {
+            const [rows] = await db.query(sql);
+            logger.info(`Retrieved denda with nama`);
+            return rows[0] || null;
+        } catch (error) {
+            logger.error(`Error retrieving denda with nama: ${error.message}`);
+            throw error;
+        }
     }
 };
