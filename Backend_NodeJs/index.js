@@ -3,12 +3,12 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import logger from './src/utils/logger.js';
-import httpLogger from './middleware/httplogger.js';
-import anggotaRoutes from './routes/anggotaRoute.js';
-import bukuRoutes from './routes/bukuRoute.js';
-import peminjamanRoutes from './routes/peminjamanRoute.js';
-import dendaRoutes from './routes/dendaRoute.js';
-import authRoutes from './routes/authRoute.js';
+import httpLogger from './src/middleware/httplogger.js';
+import anggotaRoutes from './src/routes/anggotaRoute.js';
+import bukuRoutes from './src/routes/bukuRoute.js';
+import peminjamanRoutes from './src/routes/peminjamanRoute.js';
+import dendaRoutes from './src/routes/dendaRoute.js';
+import authRoutes from './src/routes/authRoute.js';
 
 dotenv.config();
 
