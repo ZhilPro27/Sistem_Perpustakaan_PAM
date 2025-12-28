@@ -1,4 +1,5 @@
 import { pustakawanModel } from "../models/pustakawanModel.js";
+import db from "../src/config/db.js";
 import baseLogger from "../src/utils/logger.js";
 const logger = baseLogger.child({ context: 'AuthController' });
 import bcrypt from "bcryptjs";
@@ -9,12 +10,14 @@ dotenv.config();
 
 export const loginPustakawan = async (req, res) => {
     const { email, password } = req.body;
+    const conn = await db.getConnection();
+    logger.info("Database connection established for loginPustakawan");
     if (!email || !password) {
         logger.warn("Login attempt with missing fields");
         return res.status(400).json({ msg: "Please enter all fields" });
     }
     try {
-        pustakawanModel.getPustakawanByEmail(email).then(async (user) => {
+        pustakawanModel.getPustakawanByEmail(conn, email).then(async (user) => {
             if (!user) {
                 logger.warn(`Login attempt with invalid email: ${email} - ${req.ip}`);
                 return res.status(400).json({ msg: "Invalid credentials" });
@@ -39,6 +42,9 @@ export const loginPustakawan = async (req, res) => {
     } catch (error) {
         logger.error(`Login error: ${error.message}`);
         res.status(500).json({ msg: "Server error" });
+    } finally {
+        conn.release();
+        logger.info("Database connection released for loginPustakawan");
     }
 };
 
