@@ -5,6 +5,7 @@ const logger = baseLogger.child({ context: 'AuthController' });
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import redisClient from "../config/redisClient.js";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ export const loginPustakawan = async (req, res) => {
             const token = jwt.sign({ id: user.id_pustakawan }, process.env.JWT_SECRET, {
                 expiresIn: `24h`,
             });
+            await redisClient.set(user.id_pustakawan.toString(), token, { EX: 86400 });
             logger.info(`Pustakawan logged in: ${email} - ${req.ip}`);
             res.json({ 
                 token,

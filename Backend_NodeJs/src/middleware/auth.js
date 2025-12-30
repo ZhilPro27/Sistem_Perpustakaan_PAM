@@ -2,10 +2,11 @@ import jwt from 'jsonwebtoken';
 import baseLogger from '../utils/logger.js';
 const logger = baseLogger.child({ context: 'AuthMiddleware' });
 import dotenv from 'dotenv';
+import redisClient from '../config/redisClient.js';
 
 dotenv.config();
 
-export const verifyToken = (req, res, next) => {
+export const verifyToken = async (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
@@ -16,6 +17,12 @@ export const verifyToken = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const storedToken = await redisClient.get(decoded.id.toString());
+
+        if (storedToken !== token) {
+            logger.warn(`Invalid token attempt from IP: ${req.ip}`);
+            return res.status(403).json({ msg: "Token tidak valid atau sudah kadaluarsa." });
+        }
         req.user = decoded;
         next();
 

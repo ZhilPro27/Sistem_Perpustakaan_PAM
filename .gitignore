@@ -3,3 +3,4 @@
 /Backend_NodeJs/.env
 /Backend_NodeJs/logs/*
 /Backend_NodeJs/uploads/*
+/Backend_NodeJs/logs/*.log
