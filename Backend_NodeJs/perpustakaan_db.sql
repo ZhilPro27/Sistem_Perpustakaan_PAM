@@ -1,5 +1,6 @@
-CREATE DATABASE perpustakaan_db;
+CREATE DATABASE IF NOT EXISTS perpustakaan_db;
 
+USE perpustakaan_db;
 CREATE TABLE pustakawan (
 	id_pustakawan INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(50) NOT NULL,
@@ -110,6 +111,10 @@ BEGIN
 	END IF;
 END$$
 DELIMITER ;
+
+CREATE USER 'perpus_user'@'localhost' IDENTIFIED BY 'perpus_pass123';
+GRANT ALL PRIVILEGES ON perpustakaan_db.* TO 'perpus_user'@'localhost';
+FLUSH PRIVILEGES;
 
 SHOW TRIGGERS;
 
