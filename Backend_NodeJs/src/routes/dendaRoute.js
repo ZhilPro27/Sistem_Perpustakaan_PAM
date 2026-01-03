@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get('/denda', verifyToken, getAllDenda);
 router.get('/denda/:id', verifyToken, getDendaById);
-router.put('/denda/update/:id', verifyToken, updateDenda);
 router.get('/denda/search', verifyToken, searchDenda);
+router.put('/denda/update/:id', verifyToken, updateDenda);
 
 export default router;
