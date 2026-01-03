@@ -3,7 +3,7 @@ const logger = baseLogger.child({ context: 'AnggotaModel' });
 
 export const anggotaModel = {
     getAllAnggota: async (conn) => {
-        const sql = "SELECT * FROM anggota";
+        const sql = "SELECT * FROM anggota ORDER BY nama ASC";
         const [results] = await conn.query(sql);
         logger.info(`Retrieved ${results.length} anggota records`);
         return results;

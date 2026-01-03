@@ -3,7 +3,7 @@ const logger = baseLogger.child({ context: 'DendaModel' });
 
 export const dendaModel = {
     getAllDenda: async (conn) => {
-        const sql = "SELECT denda.*, anggota.nama FROM denda JOIN peminjaman ON denda.id_peminjaman = peminjaman.id_peminjaman JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota";
+        const sql = "SELECT denda.*, anggota.nama FROM denda JOIN peminjaman ON denda.id_peminjaman = peminjaman.id_peminjaman JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota ORDER BY denda.id_denda DESC";
         const [results] = await conn.query(sql);
         logger.info(`Retrieved ${results.length} denda records`);
         return results;
@@ -24,7 +24,7 @@ export const dendaModel = {
     },
 
     searchDenda: async (conn, keyword) => {
-        const sql = "SELECT * FROM denda JOIN peminjaman ON denda.id_peminjaman = peminjaman.id_peminjaman JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota WHERE anggota.nama_anggota LIKE ?";
+        const sql = "SELECT * FROM denda JOIN peminjaman ON denda.id_peminjaman = peminjaman.id_peminjaman JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota WHERE anggota.nama LIKE ?";
         const searchKeyword = `%${keyword}%`;
         const [results] = await conn.query(sql, [searchKeyword]);
         logger.info(`Searched denda with keyword: ${keyword}`);

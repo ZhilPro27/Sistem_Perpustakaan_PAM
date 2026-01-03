@@ -4,7 +4,7 @@ const logger = baseLogger.child({ context: 'PeminjamanModel' });
 
 export const peminjamanModel = {
     getAllPeminjaman: async (conn) => {
-        const sql = "SELECT peminjaman.*, buku.judul, anggota.nama FROM peminjaman JOIN buku ON peminjaman.id_buku = buku.id_buku JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota";
+        const sql = "SELECT peminjaman.*, buku.judul, anggota.nama FROM peminjaman JOIN buku ON peminjaman.id_buku = buku.id_buku JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota ORDER BY peminjaman.tanggal_pinjam DESC";
         const [results] = await conn.query(sql);
         logger.info(`Retrieved ${results.length} peminjaman records`);
         return results;
@@ -40,7 +40,7 @@ export const peminjamanModel = {
 
     searchPeminjaman: async (conn, keyword) => {
         const sql = `SELECT * FROM peminjaman JOIN buku ON peminjaman.id_buku = buku.id_buku JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota
-                     WHERE buku.judul LIKE ? OR anggota.nama_anggota LIKE ?`;
+                     WHERE buku.judul LIKE ? OR anggota.nama LIKE ?`;
         const searchKeyword = `%${keyword}%`;
         const [results] = await conn.query(sql, [searchKeyword, searchKeyword]);
         logger.info(`Found ${results.length} peminjaman records matching keyword: ${keyword}`);
