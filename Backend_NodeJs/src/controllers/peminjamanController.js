@@ -130,3 +130,26 @@ export const searchPeminjaman = async (req, res) => {
         logger.info("Database connection released for searchPeminjaman");
     }
 };
+
+export const updateStatusPeminjaman = async (req, res) => {
+    const conn = await db.getConnection();
+    logger.info("Database connection established for updateStatusPeminjaman");
+    const { id } = req.params;
+    const { status } = req.body;
+    try {
+        const existingPeminjaman = await peminjamanModel.getPeminjamanById(conn, id);
+        if (!existingPeminjaman) {
+            logger.warn(`Attempt to update status of non-existing peminjaman with ID: ${id}`);
+            return res.status(404).json({ msg: "Peminjaman not found" });
+        }
+        const result = await peminjamanModel.updateStatusPeminjaman(conn, id, status);
+        logger.info(`Peminjaman status updated with ID: ${id} to status: ${status}`);
+        res.json({ message: "Peminjaman status updated successfully" });
+    } catch (error) {
+        logger.error(`Error updating peminjaman status: ${error.message}`);
+        res.status(500).json({ msg: "Server error" });
+    } finally {
+        conn.release();
+        logger.info("Database connection released for updateStatusPeminjaman");
+    }
+};

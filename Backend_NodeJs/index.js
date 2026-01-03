@@ -21,7 +21,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(httpLogger);
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static('./src/uploads'));
 app.use('/api', anggotaRoutes);
 app.use('/api', bukuRoutes);
 app.use('/api', peminjamanRoutes);
