@@ -119,8 +119,7 @@ export const searchPeminjaman = async (req, res) => {
         const results = await peminjamanModel.searchPeminjaman(conn, keyword);
         logger.info(`Searched peminjaman with keyword: ${keyword}`);
         res.json({
-            count: results.length,
-            results: results
+            results
         });
     } catch (error) {
         logger.error(`Error searching peminjaman: ${error.message}`);
